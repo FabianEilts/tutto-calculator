@@ -104,7 +104,7 @@ function Starting() {
                         </TableHeader>
                     </Table>
                 </div>
-                <Button size="lg" disabled={players.length < 1}>
+                <Button size="lg" disabled={players.length < 2}>
                     Start
                 </Button>
             </CardContent>
