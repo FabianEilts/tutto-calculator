@@ -38,10 +38,10 @@ export default function Playing() {
                         Quick Add (Common Tutto bonuses)
                     </p>
                     <div className="grid grid-cols-2 gap-2 mt-2">
+                        <Button variant="outline">+50</Button>
+                        <Button variant="outline">+100</Button>
                         <Button variant="outline">+500</Button>
                         <Button variant="outline">+1000</Button>
-                        <Button variant="outline">+1500</Button>
-                        <Button variant="outline">+2000</Button>
                     </div>
                 </CardContent>
             </Card>
