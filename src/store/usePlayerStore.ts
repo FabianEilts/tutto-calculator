@@ -1,5 +1,6 @@
 import { createPlayer, type Player } from '@/types/Player'
 import { create } from 'zustand'
+import { incrementRound } from './useTurnLogStore'
 
 type PlayersState = {
     players: Player[]
@@ -61,6 +62,11 @@ export const nextActivePlayer = (): Player => {
     }
 
     const nextIdx = (activePlayerIdx + 1) % players.length
+
+    if (nextIdx === 0) {
+        incrementRound()
+    }
+
     const nextPlayer = players[nextIdx]
     usePlayerStore.setState(() => ({
         activePlayer: nextPlayer,

@@ -33,6 +33,6 @@ export const writeTurnLogEntry = (playerName: string, totalPoints: number) => {
 
 export const incrementRound = () => {
     useTurnLogStore.setState((state) => ({
-        currentRound: state.currentRound++,
+        currentRound: state.currentRound + 1,
     }))
 }
