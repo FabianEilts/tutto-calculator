@@ -6,8 +6,11 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
+import { usePlayerStore } from '@/store/usePlayerStore'
 
 function StandingsTable() {
+    const { players } = usePlayerStore()
+
     return (
         <Table className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
             <TableHeader>
@@ -24,13 +27,26 @@ function StandingsTable() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow className="bg-white border-b border-gray-100">
-                    <TableCell className="text-gray-700 py-4 pl-4">2</TableCell>
-                    <TableCell className="text-gray-700 py-4">Bob</TableCell>
-                    <TableCell className="text-right text-gray-700 py-4 pr-4">
-                        0
-                    </TableCell>
-                </TableRow>
+                {players
+                    .toSorted((a, b) => {
+                        return b.points - a.points
+                    })
+                    .map((player, idx) => (
+                        <TableRow
+                            className="bg-white border-b border-gray-100"
+                            key={idx}
+                        >
+                            <TableCell className="text-gray-700 py-4 pl-4">
+                                {idx + 1}
+                            </TableCell>
+                            <TableCell className="text-gray-700 py-4">
+                                {player.name}
+                            </TableCell>
+                            <TableCell className="text-right text-gray-700 py-4 pr-4">
+                                {player.points}
+                            </TableCell>
+                        </TableRow>
+                    ))}
             </TableBody>
         </Table>
     )
