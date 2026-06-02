@@ -52,7 +52,6 @@ export const nextActivePlayer = (): Player => {
         throw new ReferenceError('No player is currently set as active.')
     }
 
-    console.log(activePlayer.points)
     const activePlayerIdx = players.indexOf(activePlayer)
 
     if (activePlayerIdx === -1) {

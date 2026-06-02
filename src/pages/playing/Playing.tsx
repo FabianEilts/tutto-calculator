@@ -15,6 +15,7 @@ import { Field, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { nextActivePlayer, usePlayerStore } from '@/store/usePlayerStore'
+import { writeTurnLogEntry } from '@/store/useTurnLogStore'
 import { GameState } from '@/types/GameState'
 import { ArrowRight, LogOut, ScrollText, Trophy } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -47,9 +48,15 @@ export default function Playing({ switchGameStateCallback }: IProps) {
     }
 
     const handleNextPlayersTurn = () => {
-        activePlayer?.addPoints(
+        if (!activePlayer) {
+            return
+        }
+
+        const newPlayerScore = activePlayer.addPoints(
             parseInt(currentScore === '' ? '0' : currentScore),
         )
+
+        writeTurnLogEntry(activePlayer.name, newPlayerScore)
 
         setCurrentScore('')
 

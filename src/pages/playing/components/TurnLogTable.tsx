@@ -6,8 +6,11 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
+import { useTurnLogStore } from '@/store/useTurnLogStore'
 
 function TurnLogTable() {
+    const { turnLogEntries } = useTurnLogStore()
+
     return (
         <Table className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
             <TableHeader>
@@ -24,15 +27,22 @@ function TurnLogTable() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow className="bg-white border-b border-gray-100">
-                    <TableCell className="text-gray-700 py-4 pl-4">
-                        Bob
-                    </TableCell>
-                    <TableCell className="text-gray-700 py-4">1</TableCell>
-                    <TableCell className="text-right text-gray-700 py-4 pr-4">
-                        200
-                    </TableCell>
-                </TableRow>
+                {turnLogEntries.map((entry, idx) => (
+                    <TableRow
+                        className="bg-white border-b border-gray-100"
+                        key={idx}
+                    >
+                        <TableCell className="text-gray-700 py-4 pl-4">
+                            {entry.playerName}
+                        </TableCell>
+                        <TableCell className="text-gray-700 py-4">
+                            {entry.round}
+                        </TableCell>
+                        <TableCell className="text-right text-gray-700 py-4 pr-4">
+                            {entry.totalPoints}
+                        </TableCell>
+                    </TableRow>
+                ))}
             </TableBody>
         </Table>
     )
