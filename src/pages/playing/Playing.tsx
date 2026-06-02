@@ -14,9 +14,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { nextActivePlayer, usePlayerStore } from '@/store/usePlayerStore'
 import { GameState } from '@/types/GameState'
 import { ArrowRight, LogOut, ScrollText, Trophy } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import StandingsTable from './components/StandingsTable'
 import TurnLogTable from './components/TurnLogTable'
 
@@ -25,6 +26,9 @@ interface IProps {
 }
 
 export default function Playing({ switchGameStateCallback }: IProps) {
+    const { activePlayer } = usePlayerStore()
+    const [currentScore, setCurrentScore] = useState('')
+
     useEffect(() => {
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
             e.preventDefault()
@@ -35,6 +39,27 @@ export default function Playing({ switchGameStateCallback }: IProps) {
             window.removeEventListener('beforeunload', handleBeforeUnload)
     }, [])
 
+    const quickAddValue = (value: number) => {
+        const newScore =
+            parseInt(currentScore === '' ? '0' : currentScore) + value
+
+        setCurrentScore(String(newScore))
+    }
+
+    const handleNextPlayersTurn = () => {
+        activePlayer?.addPoints(
+            parseInt(currentScore === '' ? '0' : currentScore),
+        )
+
+        setCurrentScore('')
+
+        try {
+            nextActivePlayer()
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     return (
         <div>
             <Card>
@@ -42,7 +67,9 @@ export default function Playing({ switchGameStateCallback }: IProps) {
                     <CardTitle className="flex justify-between">
                         <div>
                             <p className="text-gray-500">Current Turn</p>
-                            <p className="text-2xl font-bold">🎯 Alice</p>
+                            <p className="text-2xl font-bold">
+                                🎯 {activePlayer?.name}
+                            </p>
                         </div>
                         <AlertDialog>
                             <AlertDialogTrigger>
@@ -85,8 +112,12 @@ export default function Playing({ switchGameStateCallback }: IProps) {
                                 id="input-points"
                                 type="number"
                                 placeholder="Enter points or blank for 0"
+                                value={currentScore}
+                                onChange={(event) => {
+                                    setCurrentScore(event.target.value)
+                                }}
                             />
-                            <Button>
+                            <Button onClick={handleNextPlayersTurn}>
                                 Next
                                 <ArrowRight />
                             </Button>
@@ -96,10 +127,38 @@ export default function Playing({ switchGameStateCallback }: IProps) {
                         Quick Add (Common Tutto bonuses)
                     </p>
                     <div className="grid grid-cols-2 gap-2 mt-2">
-                        <Button variant="outline">+50</Button>
-                        <Button variant="outline">+100</Button>
-                        <Button variant="outline">+500</Button>
-                        <Button variant="outline">+1000</Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                quickAddValue(50)
+                            }}
+                        >
+                            +50
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                quickAddValue(100)
+                            }}
+                        >
+                            +100
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                quickAddValue(500)
+                            }}
+                        >
+                            +500
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                quickAddValue(1000)
+                            }}
+                        >
+                            +1000
+                        </Button>
                     </div>
                 </CardContent>
             </Card>

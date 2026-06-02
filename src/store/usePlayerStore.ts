@@ -3,7 +3,7 @@ import { create } from 'zustand'
 
 type PlayersState = {
     players: Player[]
-    active?: Player
+    activePlayer?: Player
 }
 
 export const usePlayerStore = create<PlayersState>(() => {
@@ -26,6 +26,12 @@ export const addPlayer = (
         players: [...state.players, newPlayer],
     }))
 
+    if (!usePlayerStore.getState().activePlayer) {
+        usePlayerStore.setState(() => ({
+            activePlayer: newPlayer,
+        }))
+    }
+
     return { success: true }
 }
 
@@ -33,4 +39,33 @@ export const removePlayer = (player: Player) => {
     usePlayerStore.setState((state) => ({
         players: state.players.filter((p) => p.name !== player.name),
     }))
+}
+
+export const getActivePlayer = (): Player | undefined => {
+    return usePlayerStore.getState().activePlayer
+}
+
+export const nextActivePlayer = (): Player => {
+    const { players, activePlayer } = usePlayerStore.getState()
+
+    if (!activePlayer) {
+        throw new ReferenceError('No player is currently set as active.')
+    }
+
+    console.log(activePlayer.points)
+    const activePlayerIdx = players.indexOf(activePlayer)
+
+    if (activePlayerIdx === -1) {
+        throw new RangeError(
+            'The active player was not found in the current players list.',
+        )
+    }
+
+    const nextIdx = (activePlayerIdx + 1) % players.length
+    const nextPlayer = players[nextIdx]
+    usePlayerStore.setState(() => ({
+        activePlayer: nextPlayer,
+    }))
+
+    return nextPlayer
 }
