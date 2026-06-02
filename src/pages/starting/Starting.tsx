@@ -16,10 +16,15 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { addPlayer, removePlayer, usePlayerStore } from '@/store/usePlayerStore'
+import { GameState } from '@/types/GameState'
 import { Trash, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 
-function Starting() {
+interface IProps {
+    switchGameStateCallback: (gameState: GameState) => void
+}
+
+function Starting({ switchGameStateCallback }: IProps) {
     const [playerName, setPlayerName] = useState('')
     const [inputError, setInputError] = useState('')
     const { players } = usePlayerStore()
@@ -104,7 +109,13 @@ function Starting() {
                         </TableHeader>
                     </Table>
                 </div>
-                <Button size="lg" disabled={players.length < 2}>
+                <Button
+                    size="lg"
+                    disabled={players.length < 2}
+                    onClick={() => {
+                        switchGameStateCallback(GameState.PLAYING)
+                    }}
+                >
                     Start
                 </Button>
             </CardContent>

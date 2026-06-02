@@ -1,20 +1,78 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ArrowRight, ScrollText, Trophy } from 'lucide-react'
+import { GameState } from '@/types/GameState'
+import { ArrowRight, LogOut, ScrollText, Trophy } from 'lucide-react'
+import { useEffect } from 'react'
 import StandingsTable from './components/StandingsTable'
 import TurnLogTable from './components/TurnLogTable'
 
-export default function Playing() {
+interface IProps {
+    switchGameStateCallback: (gameState: GameState) => void
+}
+
+export default function Playing({ switchGameStateCallback }: IProps) {
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            e.preventDefault()
+            e.returnValue = 'Möchtest du das Spiel wirklich verlassen?'
+        }
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () =>
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+    }, [])
+
     return (
         <div>
             <Card>
                 <CardHeader>
-                    <CardTitle>
-                        <p className="text-gray-500">Current Turn</p>
-                        <p className="text-2xl font-bold">🎯 Alice</p>
+                    <CardTitle className="flex justify-between">
+                        <div>
+                            <p className="text-gray-500">Current Turn</p>
+                            <p className="text-2xl font-bold">🎯 Alice</p>
+                        </div>
+                        <AlertDialog>
+                            <AlertDialogTrigger>
+                                <LogOut />
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                        Do you want to reset the game?
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                        Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                        onClick={() => {
+                                            switchGameStateCallback(
+                                                GameState.STARTING,
+                                            )
+                                        }}
+                                    >
+                                        Continue
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
