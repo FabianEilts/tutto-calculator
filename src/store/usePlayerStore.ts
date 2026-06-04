@@ -74,3 +74,22 @@ export const nextActivePlayer = (): Player => {
 
     return nextPlayer
 }
+
+export const resetToDefaultPlayerState = () => {
+    usePlayerStore.setState((state) => {
+        const hasChanges = state.players.some((p) => p.points !== 0)
+
+        const newPlayers = state.players.map((player) =>
+            player.points === 0 ? player : { ...player, points: 0 },
+        )
+
+        if (!hasChanges && state.activePlayer === state.players[0]) {
+            return state
+        }
+
+        return {
+            players: newPlayers,
+            activePlayer: newPlayers[0],
+        }
+    })
+}

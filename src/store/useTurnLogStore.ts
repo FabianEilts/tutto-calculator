@@ -36,3 +36,10 @@ export const incrementRound = () => {
         currentRound: state.currentRound + 1,
     }))
 }
+
+export const resetToDefaultTurnLogState = () => {
+    useTurnLogStore.setState(() => ({
+        turnLogEntries: [],
+        currentRound: 1,
+    }))
+}

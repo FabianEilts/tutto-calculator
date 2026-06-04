@@ -14,8 +14,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { nextActivePlayer, usePlayerStore } from '@/store/usePlayerStore'
-import { writeTurnLogEntry } from '@/store/useTurnLogStore'
+import {
+    nextActivePlayer,
+    resetToDefaultPlayerState,
+    usePlayerStore,
+} from '@/store/usePlayerStore'
+import {
+    resetToDefaultTurnLogState,
+    writeTurnLogEntry,
+} from '@/store/useTurnLogStore'
 import { GameState } from '@/types/GameState'
 import { ArrowRight, LogOut, ScrollText, Trophy } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -45,6 +52,12 @@ export default function Playing({ switchGameStateCallback }: IProps) {
             parseInt(currentScore === '' ? '0' : currentScore) + value
 
         setCurrentScore(String(newScore))
+    }
+
+    const handleReset = () => {
+        resetToDefaultPlayerState()
+        resetToDefaultTurnLogState()
+        switchGameStateCallback(GameState.STARTING)
     }
 
     const handleNextPlayersTurn = () => {
@@ -95,13 +108,7 @@ export default function Playing({ switchGameStateCallback }: IProps) {
                                     <AlertDialogCancel>
                                         Cancel
                                     </AlertDialogCancel>
-                                    <AlertDialogAction
-                                        onClick={() => {
-                                            switchGameStateCallback(
-                                                GameState.STARTING,
-                                            )
-                                        }}
-                                    >
+                                    <AlertDialogAction onClick={handleReset}>
                                         Continue
                                     </AlertDialogAction>
                                 </AlertDialogFooter>
