@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Ending from './features/ending/Ending'
 import Playing from './features/playing/Playing'
 import Starting from './features/starting/Starting'
 import { GameState } from './types/GameState'
@@ -10,15 +11,20 @@ function App() {
         setGameState(gameState)
     }
 
-    return (
-        <div className="p-4">
-            {GameState.STARTING === gameState ? (
-                <Starting switchGameStateCallback={switchGameState} />
-            ) : (
-                <Playing switchGameStateCallback={switchGameState} />
-            )}
-        </div>
-    )
+    const renderGameContent = () => {
+        switch (gameState) {
+            case GameState.STARTING:
+                return <Starting switchGameStateCallback={switchGameState} />
+            case GameState.PLAYING:
+                return <Playing switchGameStateCallback={switchGameState} />
+            case GameState.ENDING:
+                return <Ending switchGameStateCallback={switchGameState} />
+            default:
+                return null
+        }
+    }
+
+    return <div className="p-4">{renderGameContent()}</div>
 }
 
 export default App
