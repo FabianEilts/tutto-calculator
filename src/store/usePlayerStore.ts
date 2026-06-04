@@ -19,7 +19,11 @@ export const addPlayer = (
     const newPlayer: Player = createPlayer(name)
     const { players } = usePlayerStore.getState()
 
-    if (players.some((p) => p.name === newPlayer.name)) {
+    if (
+        players.some(
+            (p) => p.name.toLowerCase() === newPlayer.name.toLowerCase(),
+        )
+    ) {
         return { success: false, error: 'User with this name already exits' }
     }
 
