@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Playing from './pages/playing/Playing'
-import Starting from './pages/starting/Starting'
+import Playing from './features/playing/Playing'
+import Starting from './features/starting/Starting'
 import { GameState } from './types/GameState'
 
 function App() {
