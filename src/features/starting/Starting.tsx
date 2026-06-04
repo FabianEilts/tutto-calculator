@@ -99,6 +99,7 @@ function Starting({ switchGameStateCallback }: IProps) {
                                                 onClick={() => {
                                                     removePlayer(player)
                                                 }}
+                                                aria-label="Delete player"
                                             >
                                                 <Trash />
                                             </Button>
