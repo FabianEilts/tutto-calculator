@@ -131,11 +131,19 @@ export default function Playing({ switchGameStateCallback }: IProps) {
                         <div className="flex gap-4">
                             <Input
                                 id="input-points"
-                                type="number"
+                                type="text"
                                 placeholder="Enter points or blank for 0"
                                 value={currentScore}
                                 onChange={(event) => {
-                                    setCurrentScore(event.target.value)
+                                    const value = event.target.value
+
+                                    if (/^\d*$/.test(value)) {
+                                        setCurrentScore(event.target.value)
+                                    }
+                                }}
+                                onKeyDown={(event) => {
+                                    if (event.key === 'Enter')
+                                        handleNextPlayersTurn()
                                 }}
                             />
                             <Button onClick={handleNextPlayersTurn}>
