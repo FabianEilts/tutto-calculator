@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import Playing from '../Playing'
 
-const mockAddPoints = vi.fn().mockReturnValue(150)
+const mockAddPoints = vi.fn()
 const mockActivePlayer = {
     name: 'Alice',
     addPoints: mockAddPoints,
@@ -64,6 +64,7 @@ describe('Playing Component', () => {
     })
 
     it('submits points, updates stores, and clears input on "Next" click', async () => {
+        mockAddPoints.mockReturnValueOnce(150)
         const user = userEvent.setup()
         const { nextActivePlayer } = await import('@/store/usePlayerStore')
         const { writeTurnLogEntry } = await import('@/store/useTurnLogStore')
@@ -144,6 +145,23 @@ describe('Playing Component', () => {
         expect(mockEvent.preventDefault).toHaveBeenCalled()
         expect(mockEvent.returnValue).toBe(
             'Möchtest du das Spiel wirklich verlassen?',
+        )
+    })
+
+    it('winning game if score greater than winning limit', async () => {
+        mockAddPoints.mockReturnValueOnce(6000)
+        render(
+            <Playing switchGameStateCallback={mockSwitchGameStateCallback} />,
+        )
+        const user = userEvent.setup()
+        const input = screen.getByLabelText('Enter Round Points')
+        await user.type(input, '6000')
+
+        const nextButton = screen.getByRole('button', { name: /Next/i })
+        await user.click(nextButton)
+
+        expect(mockSwitchGameStateCallback).toHaveBeenCalledWith(
+            GameState.ENDING,
         )
     })
 })

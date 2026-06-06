@@ -33,6 +33,8 @@ interface IProps {
     switchGameStateCallback: (gameState: GameState) => void
 }
 
+const WINNING_SCORE: number = 6000
+
 export default function Playing({ switchGameStateCallback }: IProps) {
     const { activePlayer } = usePlayerStore()
     const [currentScore, setCurrentScore] = useState('')
@@ -68,6 +70,11 @@ export default function Playing({ switchGameStateCallback }: IProps) {
         const newPlayerScore = activePlayer.addPoints(
             parseInt(currentScore === '' ? '0' : currentScore),
         )
+
+        if (newPlayerScore >= WINNING_SCORE) {
+            switchGameStateCallback(GameState.ENDING)
+            return
+        }
 
         writeTurnLogEntry(activePlayer.name, newPlayerScore)
 

@@ -5,6 +5,8 @@ import {
     CardDescription,
     CardTitle,
 } from '@/components/ui/card'
+import { resetToDefaultPlayerState } from '@/store/usePlayerStore'
+import { resetToDefaultTurnLogState } from '@/store/useTurnLogStore'
 import { GameState } from '@/types/GameState'
 import confetti from '@hiseb/confetti'
 import { RotateCcw } from 'lucide-react'
@@ -20,6 +22,12 @@ function Ending({ switchGameStateCallback }: IProps) {
     useEffect(() => {
         confetti({ fade: true })
     }, [])
+
+    const handleNewGame = () => {
+        resetToDefaultPlayerState()
+        resetToDefaultTurnLogState()
+        switchGameStateCallback(GameState.STARTING)
+    }
 
     return (
         <Card className="gap-16">
@@ -37,12 +45,7 @@ function Ending({ switchGameStateCallback }: IProps) {
                 <RankingTable />
             </CardContent>
             <CardContent>
-                <Button
-                    className="w-full h-14"
-                    onClick={() => {
-                        switchGameStateCallback(GameState.STARTING)
-                    }}
-                >
+                <Button className="w-full h-14" onClick={handleNewGame}>
                     <RotateCcw />
                     New Game
                 </Button>
