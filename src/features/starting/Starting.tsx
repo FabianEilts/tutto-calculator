@@ -63,6 +63,9 @@ function Starting({ switchGameStateCallback }: IProps) {
                                     setInputError('')
                                     setPlayerName(event.target.value)
                                 }}
+                                onKeyDown={(event) => {
+                                    if (event.key === 'Enter') handleAddPlayer()
+                                }}
                             />
                             {inputError !== '' ? (
                                 <FieldDescription>
