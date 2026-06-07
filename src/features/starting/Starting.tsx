@@ -46,7 +46,7 @@ function Starting({ switchGameStateCallback }: IProps) {
                 <CardTitle className="flex justify-center text-2xl py-1">
                     🎲 TUTTO calculator
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="flex justify-center">
                     Simple point calculator for the card game TUTTO
                 </CardDescription>
             </CardHeader>
