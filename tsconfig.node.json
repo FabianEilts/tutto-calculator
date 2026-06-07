@@ -4,7 +4,11 @@
         "target": "es2023",
         "lib": ["ES2023"],
         "module": "esnext",
-        "types": ["node", "@testing-library/jest-dom"],
+        "types": [
+            "node",
+            "@testing-library/jest-dom",
+            "vite-plugin-pwa/client"
+        ],
         "skipLibCheck": true,
 
         /* Bundler mode */

@@ -24,7 +24,7 @@ function App() {
         }
     }
 
-    return <div className="p-4">{renderGameContent()}</div>
+    return <main className="p-4">{renderGameContent()}</main>
 }
 
 export default App
