@@ -5,7 +5,10 @@ import {
     CardDescription,
     CardTitle,
 } from '@/components/ui/card'
-import { resetToDefaultPlayerState } from '@/store/usePlayerStore'
+import {
+    resetToDefaultPlayerState,
+    usePlayerStore,
+} from '@/store/usePlayerStore'
 import { resetToDefaultTurnLogState } from '@/store/useTurnLogStore'
 import { GameState } from '@/types/GameState'
 import confetti from '@hiseb/confetti'
@@ -19,6 +22,10 @@ interface IProps {
 }
 
 function Ending({ switchGameStateCallback }: IProps) {
+    const players = usePlayerStore().players.toSorted((a, b) => {
+        return b.points - a.points
+    })
+
     useEffect(() => {
         confetti({ fade: true })
     }, [])
@@ -39,10 +46,14 @@ function Ending({ switchGameStateCallback }: IProps) {
                 <CardDescription>Final Scores & Placements</CardDescription>
             </CardTitle>
             <CardContent>
-                <Podium />
+                <Podium
+                    first={players[0]}
+                    second={players[1]}
+                    third={players[2] ?? undefined}
+                />
             </CardContent>
             <CardContent>
-                <RankingTable />
+                <RankingTable players={players.slice(3)} />
             </CardContent>
             <CardContent>
                 <Button className="w-full h-14" onClick={handleNewGame}>
