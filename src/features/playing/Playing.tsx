@@ -132,6 +132,7 @@ export default function Playing({ switchGameStateCallback }: IProps) {
                             <Input
                                 id="input-points"
                                 type="text"
+                                inputMode="numeric"
                                 placeholder="Enter points or blank for 0"
                                 value={currentScore}
                                 onChange={(event) => {
