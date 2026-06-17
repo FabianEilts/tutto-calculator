@@ -23,7 +23,7 @@ To run this project locally, follow these steps:
 1. **Clone the repository:**
 
 ```bash
-   git clone [https://github.com/FabianEilts/tutto-calculator.git](https://github.com/FabianEilts/tutto-calculator.git)
+   git clone https://github.com/FabianEilts/tutto-calculator.git
    cd tutto-calculator
 ```
 
