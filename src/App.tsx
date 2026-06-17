@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Footer from './components/Footer'
 import Ending from './features/ending/Ending'
 import Playing from './features/playing/Playing'
 import Starting from './features/starting/Starting'
@@ -24,7 +25,12 @@ function App() {
         }
     }
 
-    return <main className="p-4">{renderGameContent()}</main>
+    return (
+        <div className="flex flex-col min-h-screen bg-background text-foreground">
+            <main className="grow p-4">{renderGameContent()}</main>
+            <Footer />
+        </div>
+    )
 }
 
 export default App
