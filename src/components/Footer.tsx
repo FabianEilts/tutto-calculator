@@ -29,9 +29,12 @@ function Footer() {
                         <p>Fabian Eilts</p>
                         <p>
                             Contact:{' '}
-                            <span className="underline">
+                            <a
+                                href="mailto:fabianeilts@protonmail.com"
+                                className="underline"
+                            >
                                 fabianeilts@protonmail.com
-                            </span>
+                            </a>
                         </p>
                     </div>
 
