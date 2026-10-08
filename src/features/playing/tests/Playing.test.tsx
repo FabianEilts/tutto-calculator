@@ -45,7 +45,7 @@ describe('Playing Component', () => {
         expect(screen.getByText(/🎯 Alice/i)).toBeVisible()
     })
 
-    it('allows typing into the input field and updates values with quick-add buttons', async () => {
+    it('allows typing positive/negative values and updates values with quick-add buttons', async () => {
         const user = userEvent.setup()
         render(
             <Playing switchGameStateCallback={mockSwitchGameStateCallback} />,
@@ -61,6 +61,14 @@ describe('Playing Component', () => {
         const add500Button = screen.getByRole('button', { name: '+500' })
         await user.click(add500Button)
         expect(input.value).toBe('600')
+
+        await user.clear(input)
+        await user.type(input, '-100')
+        expect(input.value).toBe('-100')
+
+        const minus1000Button = screen.getByRole('button', { name: '-1000' })
+        await user.click(minus1000Button)
+        expect(input.value).toBe('-1100')
     })
 
     it('submits points, updates stores, and clears input on "Next" click', async () => {
@@ -163,5 +171,22 @@ describe('Playing Component', () => {
         expect(mockSwitchGameStateCallback).toHaveBeenCalledWith(
             GameState.ENDING,
         )
+    })
+
+    it('treats a standalone minus as zero points on submit', async () => {
+        mockAddPoints.mockReturnValueOnce(100)
+        const user = userEvent.setup()
+
+        render(
+            <Playing switchGameStateCallback={mockSwitchGameStateCallback} />,
+        )
+
+        const input = screen.getByLabelText(/Enter Round Points/i)
+        await user.type(input, '-')
+
+        const nextButton = screen.getByRole('button', { name: /Next/i })
+        await user.click(nextButton)
+
+        expect(mockActivePlayer.addPoints).toHaveBeenCalledWith(0)
     })
 })
