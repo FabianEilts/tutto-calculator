@@ -35,6 +35,11 @@ interface IProps {
 
 const WINNING_SCORE: number = 6000
 
+const parseScoreInput = (score: string): number => {
+    const parsedScore = Number.parseInt(score, 10)
+    return Number.isNaN(parsedScore) ? 0 : parsedScore
+}
+
 export default function Playing({ switchGameStateCallback }: IProps) {
     const { activePlayer } = usePlayerStore()
     const [currentScore, setCurrentScore] = useState('')
@@ -50,8 +55,7 @@ export default function Playing({ switchGameStateCallback }: IProps) {
     }, [])
 
     const quickAddValue = (value: number) => {
-        const newScore =
-            parseInt(currentScore === '' ? '0' : currentScore) + value
+        const newScore = parseScoreInput(currentScore) + value
 
         setCurrentScore(String(newScore))
     }
@@ -68,7 +72,7 @@ export default function Playing({ switchGameStateCallback }: IProps) {
         }
 
         const newPlayerScore = activePlayer.addPoints(
-            parseInt(currentScore === '' ? '0' : currentScore),
+            parseScoreInput(currentScore),
         )
 
         if (newPlayerScore >= WINNING_SCORE) {
@@ -138,7 +142,7 @@ export default function Playing({ switchGameStateCallback }: IProps) {
                                 onChange={(event) => {
                                     const value = event.target.value
 
-                                    if (/^\d*$/.test(value)) {
+                                    if (/^-?\d*$/.test(value)) {
                                         setCurrentScore(event.target.value)
                                     }
                                 }}
@@ -188,6 +192,14 @@ export default function Playing({ switchGameStateCallback }: IProps) {
                             }}
                         >
                             +1000
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                quickAddValue(-1000)
+                            }}
+                        >
+                            -1000
                         </Button>
                     </div>
                 </CardContent>

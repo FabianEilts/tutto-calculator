@@ -13,7 +13,7 @@ export const createPlayer = (
         points: initialPoints,
 
         addPoints(amount: number) {
-            this.points += amount
+            this.points = Math.max(0, this.points + amount)
             return this.points
         },
     }
