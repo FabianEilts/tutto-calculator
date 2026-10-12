@@ -104,4 +104,17 @@ describe('usePlayerStore', () => {
             expect(state.activePlayer?.name).toBe('Alice')
         })
     })
+
+    describe('player points', () => {
+        it('should not allow player points to drop below 0', () => {
+            addPlayer('Alice')
+            const alice = usePlayerStore.getState().players[0]
+
+            alice.addPoints(300)
+            const newScore = alice.addPoints(-500)
+
+            expect(newScore).toBe(0)
+            expect(alice.points).toBe(0)
+        })
+    })
 })
